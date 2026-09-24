@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "organization": "laravel-learn-skills",
+  "date": "September 2026",
+  "abstract": "Scans a Laravel app with a read-only Node script (routes, migrations, classes, tests, lessons), compares it with the project's scope doc, and offers the owner 3 small tasks to learn from, one marked next in build order. Writes TICKET.md for the pick.",
+  "references": [
+    "https://laravel.com/docs",
+    "https://github.com/vercel-labs/agent-skills"
+  ]
+}

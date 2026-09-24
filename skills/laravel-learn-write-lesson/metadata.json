@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "organization": "laravel-learn-skills",
+  "date": "September 2026",
+  "abstract": "Turns a learning ticket into a lesson: full reference code in learn/NN-slug/ref/ proven in a scratch copy with SQLite, plus README, GUIDE, and answers. Gives the owner one step at a time.",
+  "references": [
+    "https://laravel.com/docs",
+    "https://github.com/vercel-labs/agent-skills"
+  ]
+}

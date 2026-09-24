@@ -1,0 +1,7 @@
+{
+  "appPath": ".",
+  "buildOrderDoc": "docs/scope.md",
+  "baseBranch": "origin/main",
+  "shell": "bash",
+  "baseUrl": "http://localhost:8000/api"
+}

@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "organization": "laravel-learn-skills",
+  "date": "September 2026",
+  "abstract": "Coaches the owner while they type a Laravel lesson by hand: next step on done, a help ladder on stuck, read-only review on check, standing exceptions (PHPDoc, Scribe, migrations, tests on ask), and the ship flow to a PR.",
+  "references": [
+    "https://laravel.com/docs",
+    "https://github.com/vercel-labs/agent-skills"
+  ]
+}

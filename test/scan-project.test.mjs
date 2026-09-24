@@ -1,0 +1,57 @@
+import { spawnSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const script = join(here, '..', 'skills', 'laravel-learn-pick-task', 'scripts', 'scan-project.mjs');
+const fixture = join(here, 'fixtures', 'tiny-laravel');
+
+function scan(root = fixture) {
+  const result = spawnSync(process.execPath, [script, root, '--no-artisan'], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  return { json: JSON.parse(result.stdout), raw: result.stdout };
+}
+
+test('reads the config and has no blockers except regex routes', () => {
+  const { json } = scan();
+  assert.equal(json.config.buildOrderDoc, 'docs/scope.md');
+  assert.deepEqual(json.blockers, ['routes_from_regex']);
+  assert.equal(json.routesSource, 'regex');
+});
+
+test('finds tables, classes, and tests', () => {
+  const { json } = scan();
+  assert.deepEqual(json.tables, ['posts']);
+  assert.deepEqual(json.classes.app.models, ['Post']);
+  assert.deepEqual(json.classes.app.controllers, ['PostController']);
+  assert.deepEqual(json.classes.app.requests, ['StorePostRequest']);
+  assert.equal(json.tests.app.testCalls, 2);
+});
+
+test('splits doc endpoints into done, stub, and missing', () => {
+  const { json } = scan();
+  const short = (rows) => rows.map((r) => `${r.method} ${r.path}`);
+  assert.deepEqual(short(json.endpoints.done), ['GET /api/posts']);
+  assert.deepEqual(short(json.endpoints.stubs), ['GET /api/posts/{post}']);
+  assert.deepEqual(short(json.endpoints.missing), ['POST /api/posts', 'POST /api/posts/{post}/comments']);
+});
+
+test('reads build order and lessons', () => {
+  const { json } = scan();
+  assert.deepEqual(json.buildOrder.map((b) => b.title), ['Posts', 'Comments']);
+  assert.deepEqual(json.lessons.map((l) => `${l.number}:${l.status}`), ['1:done', '2:in-progress']);
+  assert.equal(json.summary.lessonsInProgress, 1);
+  assert.equal(json.summary.nextLessonNumber, 3);
+});
+
+test('same input gives the same output', () => {
+  assert.equal(scan().raw, scan().raw);
+});
+
+test('no config gives the no_config blocker', () => {
+  const { json } = scan(join(fixture, 'docs'));
+  assert.ok(json.blockers.includes('no_config'));
+  assert.ok(json.blockers.includes('no_artisan'));
+});

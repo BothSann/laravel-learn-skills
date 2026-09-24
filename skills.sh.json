@@ -1,0 +1,15 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Learn Laravel by building",
+      "description": "Pick a real task from your Laravel app, get a lesson for it, type the code yourself, and get checked by the agent.",
+      "skills": [
+        "laravel-learn-pick-task",
+        "laravel-learn-write-lesson",
+        "laravel-learn-coach"
+      ]
+    }
+  ]
+}
