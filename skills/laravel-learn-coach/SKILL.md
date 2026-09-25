@@ -17,6 +17,7 @@ Always read first:
 - [references/shared/hard-rules.md](references/shared/hard-rules.md) — who writes what. The most important file.
 - [references/shared/voice.md](references/shared/voice.md) — plain English
 - [references/shared/code-quality.md](references/shared/code-quality.md) — the rules to review against (project rules first, then Laravel Boost)
+- [references/shared/review-rules.md](references/shared/review-rules.md) — general Laravel review rules and how to write a finding
 
 ## Find the lesson
 

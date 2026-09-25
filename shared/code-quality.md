@@ -11,6 +11,7 @@ Read them in this order. **When two disagree, the higher one wins.**
 |---|---|---|---|
 | 1 | Project rules (the team lead's or CTO's) | every file in `rulesDirs` | `apps/api/.claude/rules/architecture.md`: "Controller -> Service -> Repository" |
 | 2 | What the app already does | sibling files of the layer you write | the current `AuthController` before a new controller |
+| 2b | General review rules | `review-rules.md` (next to this file) | "A password change ends every other session" |
 | 3 | Laravel Boost guidelines | files in `guidelines` | `apps/api/CLAUDE.md` inside `<laravel-boost-guidelines>` |
 | 4 | Laravel Boost skills | `laravel-best-practices`, `testing-best-practices` in `skillsDirs` | `rules/validation.md`: "Use Form Requests" |
 | 5 | Laravel docs for the installed version | Boost MCP tool `search-docs`, if it is running | "Laravel 13 `Auth::attempt` signature" |
@@ -18,6 +19,7 @@ Read them in this order. **When two disagree, the higher one wins.**
 Why this order:
 
 - The project rules are hard-won team decisions. Boost itself says: "the best choice is the one the codebase already uses".
+- `review-rules.md` holds mistakes that reviewers keep finding in real Laravel PRs. They are true in any project, so they come before the general Boost defaults.
 - Boost skills are general Laravel defaults. They fill the gaps the project rules leave.
 - `search-docs` gives the right API for the installed version. Memory can be one version old.
 
@@ -49,11 +51,20 @@ Read only the rows the lesson touches. Paths are inside the `laravel-best-practi
 Example: a login endpoint touches routing, validation, security, error handling.
 Read those 4 files. Skip the other 14.
 
+## Check how the app logs users in, before writing tests
+
+The login model decides the test helper. Read the `User` model first.
+
+| App uses | Test helper | Why |
+|---|---|---|
+| Sanctum SPA cookies (no `HasApiTokens` on `User`) | `$this->actingAs($user)` | `Sanctum::actingAs()` calls `withAccessToken()`, which only `HasApiTokens` adds. It crashes. |
+| Sanctum tokens (`HasApiTokens`) | `Sanctum::actingAs($user)`, plus one test with a real bearer token | `actingAs` alone can hide a wrong guard |
+
 ## Rule pass: before code counts as done
 
 After the code runs, read the diff again against every rule file you mapped.
 
-1. For each file: does it break a project rule? A Boost rule?
+1. For each file: does it break a project rule? A line in `review-rules.md`? A Boost rule?
 2. Fix it in `ref/`. Run the scratch proof again.
 3. If a Boost rule and a project rule disagree, keep the project rule. Write the clash down for the owner.
 
