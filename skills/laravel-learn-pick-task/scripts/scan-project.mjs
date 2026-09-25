@@ -2,7 +2,10 @@
 // Scan a Laravel app and print facts as JSON on stdout.
 // Read-only: never writes files, never changes the database.
 //
-// Usage: node scan-project.mjs <repo-root> [--no-artisan]
+// Usage: node scan-project.mjs <repo-root> [--no-artisan] [--no-gh] [--merged-prs=<file.json>]
+//
+// --no-gh          skip `gh pr list` (the merged-lesson check)
+// --merged-prs=F   read merged PRs from a JSON file instead of `gh` (for tests)
 //
 // Same input, same output: every list is sorted, no timestamps.
 
@@ -353,8 +356,9 @@ function scanLessons(root) {
       folder: `learn/${name}`,
       id: meta.id ?? null,
       status: meta.status ?? 'unknown',
+      branch: meta.branch ?? null,
       title: firstHeading(ticket) ?? firstHeading(readme),
-      files: ['TICKET.md', 'README.md', 'GUIDE.md', 'answers.md', 'ref']
+      files: ['TICKET.md', 'README.md', 'GUIDE.md', 'check-yourself.md', 'ref']
         .filter((f) => existsSync(join(dir, name, f))),
     });
   }
@@ -441,6 +445,41 @@ function scanGit(root) {
   };
 }
 
+// ---------- merged lessons ----------
+
+// Merged PRs as [{ number, headRefName }], or null when unknown.
+// Remote branches are often deleted after merge, so ask GitHub, not git.
+function loadMergedPrs(root, args) {
+  const file = args.find((a) => a.startsWith('--merged-prs='));
+  if (file) return JSON.parse(readFileSync(file.slice('--merged-prs='.length), 'utf8'));
+  if (args.includes('--no-gh')) return null;
+  const result = spawnSync('gh', ['pr', 'list', '--state', 'merged', '--limit', '200', '--json', 'number,headRefName'], {
+    cwd: root, encoding: 'utf8', timeout: 20_000, shell: process.platform === 'win32',
+  });
+  if (result.status !== 0) {
+    log('gh pr list failed; merged-lesson check skipped');
+    return null;
+  }
+  try {
+    return JSON.parse(result.stdout);
+  } catch {
+    return null;
+  }
+}
+
+// A lesson that is not done but whose branch is merged: its status is stale.
+// Match the ticket's `branch:` exactly, else a head branch named after the slug.
+function markMerged(lessons, mergedPrs) {
+  for (const lesson of lessons) {
+    lesson.mergedPr = null;
+    if (!mergedPrs || lesson.status === 'done' || lesson.status === 'dropped') continue;
+    const pr = mergedPrs.find((p) => (lesson.branch
+      ? p.headRefName === lesson.branch
+      : p.headRefName === lesson.slug || p.headRefName.endsWith(`/${lesson.slug}`)));
+    if (pr) lesson.mergedPr = { number: pr.number, branch: pr.headRefName };
+  }
+}
+
 // ---------- main ----------
 
 function main() {
@@ -488,6 +527,7 @@ function main() {
 
   const { migrations, tables } = scanMigrations(root, modulesPath, phpFiles);
   const lessons = scanLessons(root);
+  markMerged(lessons, loadMergedPrs(root, args));
   const qualitySources = scanQualitySources(root, config, appPath);
   if (qualitySources.missingBoostSkills.length) blockers.push('no_boost_skills');
 
@@ -517,6 +557,7 @@ function main() {
       endpointsMissing: endpoints.missing.length,
       lessons: lessons.length,
       lessonsInProgress: lessons.filter((l) => l.status === 'in-progress').length,
+      staleLessons: lessons.filter((l) => l.mergedPr).map((l) => l.number),
       nextLessonNumber: lessons.reduce((max, l) => Math.max(max, l.number), 0) + 1,
     },
   };

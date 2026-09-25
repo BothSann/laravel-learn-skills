@@ -7,6 +7,7 @@ Real example: `learn/03-base-repository/TICKET.md` in xpress-social.
 ---
 id: XS-5
 status: proposed
+branch: feature/me-endpoint
 ---
 
 # Ticket XS-5: Me endpoint
@@ -74,3 +75,6 @@ Proposed by the agent. The owner confirms before the lesson is written.
 - Criteria are things a curl or `tinker --execute` can prove. Not "code is clean".
 - Every criterion has a real number or string to check.
 - Decisions: only real open questions. Take them from the project docs' open questions when they exist.
+- Read each decision row once more before you save. The "Proposal" must agree with its own "Why". Bad: proposal "invokable controller", why "more actions come later". An invokable controller holds one action, so the why argues against it.
+- `branch`: the branch name the guide will use. The scanner matches it against merged PRs to spot a finished lesson.
+- Example code in a ticket is shape only. The real shape comes from the sibling files in the app.

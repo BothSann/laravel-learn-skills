@@ -26,6 +26,7 @@ Read these before you write anything to the owner:
    - Missing: follow [references/first-run.md](references/first-run.md). Stop until it exists.
 2. Run the scanner. Save JSON to the scratchpad, not the repo.
 3. Stop on blockers (table below).
+   - `summary.staleLessons` not empty: that lesson's PR is already merged, but `TICKET.md` still says `proposed` or `in-progress`. Say so ("Lesson 04: PR #6 merged on the base branch"). Ask the owner to confirm, then set `status: done`. Never offer "finish lesson NN" for it.
 4. Read the scan JSON and the `buildOrderDoc` section on build order. Nothing else yet.
 5. Build the candidate list. Rank it with [references/scoring.md](references/scoring.md).
 6. Offer 3. Mark one as **next in build order**. Wait for the owner to pick.
@@ -41,6 +42,7 @@ node <this-skill-dir>/scripts/scan-project.mjs <repo-root> > <scratchpad>/scan.j
 **Arguments:**
 - `<repo-root>` — the folder with `learn/` (defaults to the current folder)
 - `--no-artisan` — skip `php artisan route:list --json` and read `routes/*.php` by regex. Use when PHP or the database is not up.
+- `--no-gh` — skip `gh pr list`. Then stale lessons are not found. The scan asks GitHub because remote branches are often deleted after merge.
 
 The scanner is read-only. `route:list` does not change anything.
 Logs go to stderr. JSON goes to stdout.
@@ -69,7 +71,7 @@ Main keys (full list in the script):
 | `tests` | per module: test files and `it(`/`test(` calls |
 | `buildOrder` | numbered list under the "Build order" heading of `buildOrderDoc` |
 | `endpoints.done` / `.stubs` / `.missing` | doc endpoints split by what the routes show |
-| `lessons` | `learn/NN-*` folders with `status` from `TICKET.md` |
+| `lessons` | `learn/NN-*` folders with `status` and optional `branch` from `TICKET.md`, plus `mergedPr` when a merged PR matches |
 | `qualitySources` | project rule files, Boost skills and their rule files, Boost guidelines, `laravelBoostMcp` |
 | `summary.nextLessonNumber` | number for the new lesson folder |
 

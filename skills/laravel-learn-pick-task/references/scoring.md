@@ -6,7 +6,8 @@ From the scan JSON:
 
 | Source | Candidate |
 |---|---|
-| `lessons` with `status: in-progress` | "Finish lesson NN" |
+| `lessons` with `status: in-progress` and `mergedPr: null` | "Finish lesson NN" |
+| `lessons` with a `mergedPr` | not a candidate. Its PR is merged. Ask the owner to mark it `done`. |
 | `lessons` with `status: proposed` | "Start lesson NN" (ticket exists, no ref yet) |
 | `endpoints.stubs` | Replace the stub with a real controller |
 | `endpoints.missing` | Build the endpoint |
