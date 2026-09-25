@@ -76,6 +76,9 @@ You should see `MeController@show`, not `Closure`.
 - Start from plain PHP. Then show what Laravel adds.
 - Open the magic once. Example: show the SQL that `User::create([...])` runs.
 - One check per step. Best is a `php artisan tinker --execute "..."` one-liner, a curl, or `route:list`.
+- A check must pass using only the steps done so far. Bad: step 3 (controller) says `route:list` shows the controller, but the route is wired in step 4.
+- Code in this template is shape only. Copy the real shape from the sibling files. Example: if `AuthController` answers with `ApiResponse::success(data: new MeResource($user))`, a new controller does the same, not `return new MeResource(...)`.
+- If the scratch run showed an existing test breaks, add a "you type" step that fixes it, with the before and after line.
 - "You should see" uses the real output from the scratch run.
 - Commands in the owner's `shell`. PowerShell curl: `curl.exe`, double quotes on URL and headers, single quotes on JSON.
 - Generator commands exactly as the owner runs them, from `generator` in config.

@@ -7,7 +7,7 @@ Turns a picked ticket into a lesson you can follow. The agent writes the full an
 - Confirm the ticket's decisions with you
 - Full reference code in `learn/NN-slug/ref/`, same paths as your app
 - A proof run in a scratch copy with SQLite. Never your database.
-- `README.md`, `GUIDE.md`, `answers.md`
+- `README.md`, `GUIDE.md`, `check-yourself.md` (quiz, answer under each question)
 - Step 1 only, then wait
 
 ## Skill structure
@@ -19,6 +19,6 @@ laravel-learn-write-lesson/
     ├── scratch-run.md          prove ref/ in a copy of the app
     ├── readme-template.md
     ├── guide-template.md
-    ├── answers-template.md
+    ├── check-yourself-template.md
     └── shared/                 copied from ../../shared by npm run sync
 ```

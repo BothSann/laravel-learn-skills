@@ -1,6 +1,6 @@
 ---
 name: laravel-learn-write-lesson
-description: Turn a picked Laravel learning ticket into a full lesson - working reference code in learn/NN-slug/ref/ that follows the project rules and Laravel Boost best practices (laravel-best-practices, testing-best-practices), proven in a scratch copy with SQLite, plus README.md, GUIDE.md, and answers.md - then give the owner step 1 only. Use when the owner says "write the lesson", "build lesson 04", "make the ref code", "the ticket is ok, go on", or confirms the decisions in a TICKET.md with status proposed. Never writes into the owner's app code. Do not use to pick a task (laravel-learn-pick-task) or to review typed code (laravel-learn-coach).
+description: Turn a picked Laravel learning ticket into a full lesson - working reference code in learn/NN-slug/ref/ that follows the project rules and Laravel Boost best practices (laravel-best-practices, testing-best-practices), proven in a scratch copy with SQLite, plus README.md, GUIDE.md, and check-yourself.md - then give the owner step 1 only. Use when the owner says "write the lesson", "build lesson 04", "make the ref code", "the ticket is ok, go on", or confirms the decisions in a TICKET.md with status proposed. Never writes into the owner's app code. Do not use to pick a task (laravel-learn-pick-task) or to review typed code (laravel-learn-coach).
 license: MIT
 metadata:
   author: thannsopheakboth
@@ -36,7 +36,7 @@ Read these first:
 7. **Write the lesson files:**
    - `README.md` from [references/readme-template.md](references/readme-template.md)
    - `GUIDE.md` from [references/guide-template.md](references/guide-template.md), with the "Rules this lesson follows" table
-   - `answers.md` from [references/answers-template.md](references/answers-template.md)
+   - `check-yourself.md` from [references/check-yourself-template.md](references/check-yourself-template.md): each answer right under its question
 8. **Set status.** `TICKET.md` frontmatter `status: in-progress`.
 9. **Give step 1 only.** Then stop and wait for "done", "stuck", or "check".
 
@@ -106,4 +106,4 @@ Say **done**, **stuck**, or **check**.
 | Scratch copy fails on `composer install`          | Copy `vendor/` too, or run with `--no-scripts`. See scratch-run.md.                     |
 | A criterion needs Redis, S3, mail                 | Use the fake: `Storage::fake()`, `Mail::fake()`, `CACHE_STORE=array`. Say it was faked. |
 | Project rule and ticket disagree                  | Stop. Ask the owner. Fix the ticket or the rule first.                                  |
-| Owner changed a decision after `ref/` was written | Update `ref/`, run the scratch proof again, update GUIDE and answers.                   |
+| Owner changed a decision after `ref/` was written | Update `ref/`, run the scratch proof again, update GUIDE and check-yourself.           |

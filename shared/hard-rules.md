@@ -11,7 +11,7 @@ These rules hold in every step of every skill.
 | --------------------------------------------- | ------------------------------- | ----------------------------------- |
 | App code (models, controllers, services, ...) | owner types it                  | `appPath` from config               |
 | Example code                                  | agent                           | `learn/NN-slug/ref/`                |
-| Lesson text (TICKET, README, GUIDE, answers)  | agent                           | `learn/NN-slug/`                    |
+| Lesson text (TICKET, README, GUIDE, quiz)     | agent                           | `learn/NN-slug/`                    |
 | Migrations                                    | agent (standing exception)      | the app's migrations folder         |
 | PHPDoc blocks                                 | agent, after owner's code works | owner's file, docblocks only        |
 | Scribe attributes on controllers              | agent                           | owner's controller, attributes only |

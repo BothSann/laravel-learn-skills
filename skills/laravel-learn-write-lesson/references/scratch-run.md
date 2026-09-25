@@ -30,14 +30,28 @@ In `.env`:
 DB_CONNECTION=sqlite
 DB_DATABASE=<absolute path>/database/database.sqlite
 CACHE_STORE=array
-SESSION_DRIVER=array
+SESSION_DRIVER=file
 QUEUE_CONNECTION=sync
 MAIL_MAILER=array
 ```
 
 Check: `php artisan db:show` says `SQLite`. **Stop if it says `pgsql` or `mysql`.**
 
-## 3. Put `ref/` on top
+`SESSION_DRIVER=file`, not `array`: with `array`, the session is gone after each request, so a login curl followed by a second curl is always 401.
+
+Cookie login (Sanctum SPA): also set `SANCTUM_STATEFUL_DOMAINS=127.0.0.1:8123` (the host and port you curl). Without it, login answers 200 but sets no session.
+
+## 3. Run the tests once before `ref/`
+
+Run the test suite of every module the ticket touches, before you copy anything:
+
+```bash
+php artisan test asgard/Api --compact
+```
+
+Write down the count. This is the baseline.
+
+## 4. Put `ref/` on top
 
 ```bash
 cp -r <repo>/learn/04-me-endpoint/ref/apps/api/. "$SCRATCH/"
@@ -46,7 +60,9 @@ php artisan migrate:fresh --force
 
 `migrate:fresh` is fine here. It is the scratch database.
 
-## 4. Prove each criterion
+Run the same module tests again. **Any test that passed before and fails now is a break the owner must fix.** Example: `me` changed from the raw model to `{ "data": ... }`, so an old `assertJsonPath('id', ...)` must become `data.id`. Fix it in the scratch copy to prove the fix. Then add a "you type" step for it in `GUIDE.md`.
+
+## 5. Prove each criterion
 
 Start a server on a free port. Then one curl per criterion.
 
@@ -61,7 +77,7 @@ For cookie or session flows, keep a cookie jar: `-c jar.txt -b jar.txt`.
 
 Stop the server after.
 
-## 5. Run the gates
+## 6. Run the gates
 
 Every command in `gates`, plus the tests in `ref/`:
 
@@ -73,7 +89,7 @@ php artisan test --compact
 
 In the scratch copy, fixing with Pint is fine. Copy the fixed file back into `ref/`.
 
-## 6. Record the result
+## 7. Record the result
 
 In `GUIDE.md` intro, one line:
 

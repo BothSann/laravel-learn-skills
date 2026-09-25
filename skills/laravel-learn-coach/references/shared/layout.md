@@ -9,9 +9,9 @@ learn/
   learn.config.json          project facts (see project-config.md)
   01-foundation-api-response/
     TICKET.md                the job: story, scope, criteria, decisions
-    README.md                goal, new words, step table, check yourself
+    README.md                goal, new words, step table, where you are now
     GUIDE.md                 each step: what, why, how, code, words, check
-    answers.md               short answers to "check yourself"
+    check-yourself.md        quiz: each answer hidden right under its question
     ref/                     full working code, same paths as the real app
       apps/api/asgard/Foundation/src/Support/Http/ApiResponse.php
   notes/

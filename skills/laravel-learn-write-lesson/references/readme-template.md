@@ -8,7 +8,7 @@ Short. The owner reads it first. Real example: `learn/03-base-repository/README.
 Read `TICKET.md` first. It is the job.
 `GUIDE.md` has the what, why, and how for each step.
 `ref/` has the full working code. Look at it after you try.
-`answers.md` has short answers to "check yourself".
+`check-yourself.md` is the quiz. Each answer is under its question.
 
 ## Goal
 
@@ -36,12 +36,6 @@ Read `TICKET.md` first. It is the job.
 
 After each PHP file, the agent adds the PHPDoc blocks and reviews on "check".
 
-## Check yourself
-
-1. Why does `me` use `MeResource` and not return the model?
-2. What does `auth:sanctum` do when there is no session?
-3. ...
-
 ## Where you are now
 
 - `ref/` is done and proven in a scratch copy (SQLite).
@@ -52,5 +46,5 @@ After each PHP file, the agent adds the PHPDoc blocks and reviews on "check".
 
 - "New words": only words new to this owner. Check past lessons' README "New words" tables.
 - Explain each layer the first time it shows up in any lesson: Controller, Service, Repository, Resource, Form Request, Event.
-- "Check yourself": 5–8 questions. At least one "what breaks if..." and one trick question.
+- The quiz lives in `check-yourself.md`, not in the README. See `check-yourself-template.md`.
 - "Where you are now": update it when the owner finishes a step.

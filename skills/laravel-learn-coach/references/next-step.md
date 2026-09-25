@@ -2,7 +2,7 @@
 
 ## 1. Quick check of the step they finished
 
-Run the step's check yourself, if it is read-only:
+Run the step's check yourself (you, the agent), if it is read-only:
 
 | Step kind | Quick check |
 |---|---|
