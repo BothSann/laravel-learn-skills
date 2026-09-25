@@ -14,10 +14,10 @@ function scan(root = fixture) {
   return { json: JSON.parse(result.stdout), raw: result.stdout };
 }
 
-test('reads the config and has no blockers except regex routes', () => {
+test('reads the config; blockers are regex routes and one missing Boost skill', () => {
   const { json } = scan();
   assert.equal(json.config.buildOrderDoc, 'docs/scope.md');
-  assert.deepEqual(json.blockers, ['routes_from_regex']);
+  assert.deepEqual(json.blockers, ['routes_from_regex', 'no_boost_skills']);
   assert.equal(json.routesSource, 'regex');
 });
 
@@ -54,4 +54,20 @@ test('no config gives the no_config blocker', () => {
   const { json } = scan(join(fixture, 'docs'));
   assert.ok(json.blockers.includes('no_config'));
   assert.ok(json.blockers.includes('no_artisan'));
+});
+
+test('finds project rules, Boost skills, guidelines, and the Boost MCP', () => {
+  const { json } = scan();
+  const q = json.qualitySources;
+  assert.deepEqual(q.rules, [{ path: '.claude/rules/api.md', title: 'API rules' }]);
+  assert.deepEqual(q.skills, [{
+    name: 'laravel-best-practices',
+    path: '.claude/skills/laravel-best-practices',
+    boost: true,
+    ruleFiles: ['rules/validation.md'],
+  }]);
+  assert.deepEqual(q.guidelines, [{ path: 'CLAUDE.md', boost: true }]);
+  assert.equal(q.laravelBoostMcp, true);
+  assert.deepEqual(q.missingBoostSkills, ['testing-best-practices']);
+  assert.ok(json.blockers.includes('no_boost_skills'));
 });

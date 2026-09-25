@@ -361,6 +361,73 @@ function scanLessons(root) {
   return lessons;
 }
 
+// ---------- quality sources ----------
+
+const BOOST_SKILLS = ['laravel-best-practices', 'testing-best-practices'];
+
+function markdownIn(dir) {
+  return walk(dir).filter((f) => f.endsWith('.md')).sort();
+}
+
+function scanQualitySources(root, config, appPath) {
+  const rel = (path) => toPosix(relative(root, path));
+  const inApp = (...parts) => join(root, appPath ?? '.', ...parts);
+  const existing = (paths) => paths.filter((p) => existsSync(p));
+
+  const rulesDirs = config?.rulesDirs
+    ? config.rulesDirs.map((p) => join(root, p))
+    : existing([inApp('.claude', 'rules'), inApp('.ai', 'rules')]);
+  const rules = rulesDirs.flatMap((dir) => markdownIn(dir).map((file) => ({
+    path: rel(file),
+    title: firstHeading(readText(file)),
+  })));
+
+  const skillsDirs = config?.skillsDirs
+    ? config.skillsDirs.map((p) => join(root, p))
+    : existing([inApp('.claude', 'skills')]);
+  const skills = [];
+  for (const dir of skillsDirs) {
+    if (!isDir(dir)) continue;
+    for (const name of readdirSync(dir).sort()) {
+      const skillFile = join(dir, name, 'SKILL.md');
+      if (!existsSync(skillFile)) continue;
+      const meta = frontmatter(readText(skillFile));
+      skills.push({
+        name: meta.name ?? name,
+        path: rel(join(dir, name)),
+        boost: BOOST_SKILLS.includes(meta.name ?? name),
+        ruleFiles: markdownIn(join(dir, name))
+          .filter((f) => f !== skillFile)
+          .map((f) => toPosix(relative(join(dir, name), f))),
+      });
+    }
+  }
+
+  const guidelineFiles = config?.guidelines
+    ? config.guidelines.map((p) => join(root, p))
+    : existing([inApp('CLAUDE.md'), inApp('AGENTS.md')]);
+  const guidelines = guidelineFiles.filter((f) => existsSync(f)).map((file) => ({
+    path: rel(file),
+    boost: (readText(file) ?? '').includes('<laravel-boost-guidelines>'),
+  }));
+
+  const mcpFiles = [...new Set([inApp('.mcp.json'), join(root, '.mcp.json')])];
+  const laravelBoostMcp = mcpFiles.some((file) => {
+    const servers = readJson(file)?.mcpServers ?? {};
+    return Object.entries(servers).some(([key, server]) => key.includes('laravel-boost')
+      || (server.args ?? []).includes('boost:mcp'));
+  });
+
+  const found = new Set(skills.map((s) => s.name));
+  return {
+    rules,
+    skills,
+    guidelines,
+    laravelBoostMcp,
+    missingBoostSkills: BOOST_SKILLS.filter((name) => !found.has(name)),
+  };
+}
+
 // ---------- git ----------
 
 function scanGit(root) {
@@ -421,6 +488,8 @@ function main() {
 
   const { migrations, tables } = scanMigrations(root, modulesPath, phpFiles);
   const lessons = scanLessons(root);
+  const qualitySources = scanQualitySources(root, config, appPath);
+  if (qualitySources.missingBoostSkills.length) blockers.push('no_boost_skills');
 
   const output = {
     root: toPosix(root),
@@ -438,6 +507,7 @@ function main() {
     buildOrder: doc.buildOrder,
     endpoints,
     lessons,
+    qualitySources,
     summary: {
       routes: routes.length,
       tables: tables.length,

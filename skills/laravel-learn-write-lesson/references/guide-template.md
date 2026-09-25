@@ -25,6 +25,15 @@ Request path:
 
     curl  ->  auth:sanctum (401 if no session)  ->  MeController::show  ->  MeResource  ->  JSON
 
+## Rules this lesson follows
+
+| Choice in the code | Rule | Source |
+|---|---|---|
+| `MeController::show()` only returns a Resource | Controllers stay HTTP-only | project: `architecture.md` "API read/write shape" |
+| Answer through `MeResource`, not the model | For APIs, default to Eloquent API Resources | project: `laravel.md` "APIs And Eloquent Resources" |
+
+Clashes between project rules and Boost: none. (Or: name the clash and say the project rule won.)
+
 ## Words used in this guide
 
 - **Guard**: ...
@@ -62,6 +71,8 @@ You should see `MeController@show`, not `Closure`.
 
 ## Rules
 
+- "Rules this lesson follows" is required. How to fill it: `code-quality.md`, "Show the owner where each choice comes from".
+- In each step, the **Why** names the rule when one drove the choice.
 - Start from plain PHP. Then show what Laravel adds.
 - Open the magic once. Example: show the SQL that `User::create([...])` runs.
 - One check per step. Best is a `php artisan tinker --execute "..."` one-liner, a curl, or `route:list`.

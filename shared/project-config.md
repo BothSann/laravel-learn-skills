@@ -11,7 +11,9 @@ Project facts live here, not in the skills. Same skills, any Laravel app.
 | `modulesPath` | no | folder of modules, if the app uses modules | `apps/api/asgard` |
 | `buildOrderDoc` | yes | doc with the endpoint list and build order | `docs/api-scope.md` |
 | `docs` | no | more docs to read when writing a lesson | `["docs/architecture.md"]` |
-| `rulesDirs` | no | coding rules the ref code must follow | `["apps/api/.claude/rules"]` |
+| `rulesDirs` | no | project coding rules (team lead or CTO). Win over everything else. | `["apps/api/.claude/rules"]` |
+| `skillsDirs` | no | folders with Laravel Boost skills (`laravel-best-practices`, `testing-best-practices`) | `["apps/api/.claude/skills"]` |
+| `guidelines` | no | Boost guideline files | `["apps/api/CLAUDE.md"]` |
 | `generator` | no | command prefix to make new files | `php artisan module:make-` |
 | `baseBranch` | yes | branch to start from | `origin/main` |
 | `commitStyle` | no | example commit message | `feat(account): add me endpoint` |
@@ -29,6 +31,10 @@ Project facts live here, not in the skills. Same skills, any Laravel app.
 | `scribe` | Scribe attributes on controllers |
 | `migrations` | migration files. Owner still runs `migrate`. |
 
+If `rulesDirs`, `skillsDirs`, or `guidelines` is missing, the scanner looks in the default places:
+`<appPath>/.claude/rules`, `<appPath>/.claude/skills`, `<appPath>/.ai/rules`, `<appPath>/CLAUDE.md`, `<appPath>/AGENTS.md`.
+How the agent uses them: [code-quality.md](code-quality.md).
+
 ## Full example (xpress-social)
 
 ```json
@@ -38,6 +44,8 @@ Project facts live here, not in the skills. Same skills, any Laravel app.
   "buildOrderDoc": "docs/api-scope.md",
   "docs": ["docs/architecture.md", "docs/prd.md", "docs/domain.md"],
   "rulesDirs": ["apps/api/.claude/rules"],
+  "skillsDirs": ["apps/api/.claude/skills"],
+  "guidelines": ["apps/api/CLAUDE.md"],
   "generator": "php artisan module:make-",
   "baseBranch": "origin/main",
   "commitStyle": "feat(account): add me endpoint",

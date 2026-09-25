@@ -1,6 +1,6 @@
 ---
 name: laravel-learn-write-lesson
-description: Turn a picked Laravel learning ticket into a full lesson - working reference code in learn/NN-slug/ref/, proven in a scratch copy with SQLite, plus README.md, GUIDE.md, and answers.md - then give the owner step 1 only. Use when the owner says "write the lesson", "build lesson 04", "make the ref code", "the ticket is ok, go on", or confirms the decisions in a TICKET.md with status proposed. Never writes into the owner's app code. Do not use to pick a task (laravel-learn-pick-task) or to review typed code (laravel-learn-coach).
+description: Turn a picked Laravel learning ticket into a full lesson - working reference code in learn/NN-slug/ref/ that follows the project rules and Laravel Boost best practices (laravel-best-practices, testing-best-practices), proven in a scratch copy with SQLite, plus README.md, GUIDE.md, and answers.md - then give the owner step 1 only. Use when the owner says "write the lesson", "build lesson 04", "make the ref code", "the ticket is ok, go on", or confirms the decisions in a TICKET.md with status proposed. Never writes into the owner's app code. Do not use to pick a task (laravel-learn-pick-task) or to review typed code (laravel-learn-coach).
 license: MIT
 metadata:
   author: thannsopheakboth
@@ -18,25 +18,34 @@ Read these first:
 - [references/shared/layout.md](references/shared/layout.md) — lesson files and status
 - [references/shared/voice.md](references/shared/voice.md) — plain English
 - [references/shared/project-config.md](references/shared/project-config.md) — config fields
+- [references/shared/code-quality.md](references/shared/code-quality.md) — **which rules the code must follow, and in what order.** The most important file for this skill.
 
 ## How It Works
 
 1. **Read the ticket.** `learn/NN-slug/TICKET.md`. If `status` is not `proposed`, ask why before going on.
 2. **Confirm decisions.** Show the "Decisions" table. Wait for "ok" or changes. Write the answers into the ticket.
-3. **Read the project rules.** Every file in `rulesDirs`, and the docs in `docs`. Read one existing file of each layer you will touch. Example: the current `AuthController` before writing a new controller.
+3. **Load the rules.** Follow "Where the rules come from" in `code-quality.md`:
+   - Run the scanner from `laravel-learn-pick-task` (or reuse its JSON from this session). Take the paths from `qualitySources`.
+   - Read **every** project rule file (`qualitySources.rules`) and the Boost guideline files.
+   - Read one sibling file of each layer you will touch. Example: the current `AuthController` before a new controller.
+   - Map the ticket to Boost rule files with the table in `code-quality.md`. Read only those.
+   - Check version-sensitive Laravel calls with the Boost `search-docs` MCP tool when `laravelBoostMcp` is true.
 4. **Write `ref/`.** The complete working code. Same paths as the real app. See "ref rules" below.
 5. **Prove it** in a scratch copy. Follow [references/scratch-run.md](references/scratch-run.md). Every criterion. Never the owner's database.
-6. **Write the lesson files:**
+6. **Rule pass.** Read the diff again against every rule file from step 3. Fix, then prove again. See "Rule pass" in `code-quality.md`.
+7. **Write the lesson files:**
    - `README.md` from [references/readme-template.md](references/readme-template.md)
-   - `GUIDE.md` from [references/guide-template.md](references/guide-template.md)
+   - `GUIDE.md` from [references/guide-template.md](references/guide-template.md), with the "Rules this lesson follows" table
    - `answers.md` from [references/answers-template.md](references/answers-template.md)
-7. **Set status.** `TICKET.md` frontmatter `status: in-progress`.
-8. **Give step 1 only.** Then stop and wait for "done", "stuck", or "check".
+8. **Set status.** `TICKET.md` frontmatter `status: in-progress`.
+9. **Give step 1 only.** Then stop and wait for "done", "stuck", or "check".
 
 ## `ref/` rules
 
 - Mirror real paths: `learn/04-me-endpoint/ref/apps/api/asgard/Api/src/Http/Controllers/V1/MeController.php`.
-- Follow every rule in `rulesDirs`. Rules win over habits. If a rule and a skill disagree, the project rule wins.
+- Follow every project rule, then Boost, in the order in `code-quality.md`. The project rule wins a clash. Write each clash down in the GUIDE.
+- Code a senior Laravel dev would merge. Not a short demo. The owner copies what they see.
+- Tests follow the `testing-best-practices` skill: one test per acceptance criterion and per decision in the code.
 - Use the same generators the owner will use. The guide tells them the exact `generator` command. `ref/` shows the file after they edit it.
 - Only the files this ticket needs. No extras "for later".
 - Migrations: write them in `ref/` too. After the owner confirms, the agent writes the same migration in the app (standing exception `migrations`).
@@ -71,6 +80,7 @@ After writing everything, say:
 - Ticket: `learn/04-me-endpoint/TICKET.md` (decisions saved)
 - Ref code: 3 files in `learn/04-me-endpoint/ref/`
 - Proven in a scratch copy (SQLite): 4 of 4 criteria. Pint 0. Larastan 0.
+- Rules read: 10 project rules, Boost `routing.md`, `validation.md`, `security.md`. Clashes: none.
 - Not proven: nothing. (Or: "criterion 3 needs Redis, not run.")
 
 ## Step 1: branch

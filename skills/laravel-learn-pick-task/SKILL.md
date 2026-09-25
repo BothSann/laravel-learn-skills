@@ -70,6 +70,7 @@ Main keys (full list in the script):
 | `buildOrder` | numbered list under the "Build order" heading of `buildOrderDoc` |
 | `endpoints.done` / `.stubs` / `.missing` | doc endpoints split by what the routes show |
 | `lessons` | `learn/NN-*` folders with `status` from `TICKET.md` |
+| `qualitySources` | project rule files, Boost skills and their rule files, Boost guidelines, `laravelBoostMcp` |
 | `summary.nextLessonNumber` | number for the new lesson folder |
 
 Short example (xpress-social, 2026-09-24):
@@ -95,6 +96,7 @@ It counts as not built. It is often the best next task: small, and the route is 
 | `no_config` | Follow [references/first-run.md](references/first-run.md). |
 | `no_artisan` | `appPath` is wrong. Ask the owner where `artisan` is. Fix the config. |
 | `no_build_order_doc` | Ask the owner for the scope doc. Or offer to draft one with them first. |
+| `no_boost_skills` | Fine to go on. Tell the owner the lessons follow project rules only. To add Boost: `composer require laravel/boost --dev` then `php artisan boost:install` (owner runs it). |
 | `routes_from_regex` | Fine to go on. Say route prefixes may be missed. Suggest starting the database and PHP. |
 
 ## Present Results to User

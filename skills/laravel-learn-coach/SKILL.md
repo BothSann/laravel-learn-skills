@@ -16,6 +16,7 @@ Always read first:
 
 - [references/shared/hard-rules.md](references/shared/hard-rules.md) — who writes what. The most important file.
 - [references/shared/voice.md](references/shared/voice.md) — plain English
+- [references/shared/code-quality.md](references/shared/code-quality.md) — the rules to review against (project rules first, then Laravel Boost)
 
 ## Find the lesson
 
@@ -62,9 +63,9 @@ Shape for "check":
 
 ## Breaks
 
-| File:line | Problem | Why it matters |
-|---|---|---|
-| `routes/api/v1.php:12` | Route still uses `fn () => request()->user()` | The controller never runs. `route:list --path=me` shows `Closure`. |
+| File:line | Problem | Why it matters | Rule |
+|---|---|---|---|
+| `routes/api/v1.php:12` | Route still uses `fn () => request()->user()` | The controller never runs. `route:list --path=me` shows `Closure`. | project: `architecture.md` |
 
 ## Style
 

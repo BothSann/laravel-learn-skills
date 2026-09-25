@@ -23,6 +23,7 @@ Example, from a real app (xpress-social, 2026-09-24):
 - It never types your app code. Only `learn/` files, plus what you allow in config (migrations, PHPDoc, Scribe attributes).
 - It never runs commands that change your app or database. It gives you the command.
 - It proves its own code in a copy of your app, on SQLite. Never your database.
+- Its code follows your project rules first (for example the CTO's `.claude/rules/`), then Laravel Boost's `laravel-best-practices` and `testing-best-practices` skills. Each lesson's GUIDE shows which rule drove each choice. Details: [shared/code-quality.md](shared/code-quality.md).
 
 Full list: [shared/hard-rules.md](shared/hard-rules.md).
 
